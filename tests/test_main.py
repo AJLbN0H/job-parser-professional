@@ -6,10 +6,27 @@ from src.main import user_interaction
 
 OS_REMOVE_PATH = "vacancies.json"
 
+_MOCK_VACANCY_PYTHON_BACKEND = {
+    "id": 119780954,
+    "name": "Junior Python Backend Developer",
+    "salary": 120000,
+    "requirement": "Уверенное знание python. Уверенное знание django и DRF. Опыт "
+    "работы с git. Опыт работы с PostgreSQL и умение писать SQL...",
+    "url": "https://hh.ru/vacancy/119780954",
+}
+
+
+def _mock_get_vacancies(keyword: str, page: int):
+    if keyword == "nohtyP":
+        return []
+    if keyword == "Python-backend":
+        return [_MOCK_VACANCY_PYTHON_BACKEND.copy()]
+    return []
+
 
 def test_main_1(capsys):
 
-    with patch(
+    with patch("src.main.api_vacancies.get_vacancies", side_effect=_mock_get_vacancies), patch(
         "builtins.input", side_effect=["0", "1", "2", "1", "0", "1", " ", "nohtyP", " ", "test", "0", "101", "1", "6"]
     ):
         user_interaction()
@@ -33,7 +50,7 @@ def test_main_1(capsys):
             "Вакансии по запросу 'nohtyP' не найдены\n"
         )
 
-    with patch(
+    with patch("src.main.api_vacancies.get_vacancies", side_effect=_mock_get_vacancies), patch(
         "builtins.input",
         side_effect=["0", "1", "2", "1", "0", "1", " ", "Python-backend", " ", "test", "0", "101", "1", "0", "2", "6"],
     ):
@@ -67,7 +84,7 @@ def test_main_1(capsys):
             "Вы ввели неверный номер действия!\n"
         )
 
-    with patch(
+    with patch("src.main.api_vacancies.get_vacancies", side_effect=_mock_get_vacancies), patch(
         "builtins.input",
         side_effect=["0", "1", "2", "1", "0", "1", " ", "Python-backend", " ", "test", "0", "101", "1", "0", "1", "6"],
     ):

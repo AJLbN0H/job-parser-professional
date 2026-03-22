@@ -4,9 +4,11 @@ from unittest.mock import Mock, patch
 from src.api import HeadHunterAPI
 
 
-def test_connect_api(capsys):
-
+@patch("src.api.requests.get")
+def test_connect_api(mock_get):
+    mock_get.return_value.status_code = 200
     assert HeadHunterAPI()._connect_api().status_code == 200
+    mock_get.assert_called_once()
 
 
 class TestGetVacancies(unittest.TestCase):
