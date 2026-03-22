@@ -1,5 +1,6 @@
 # Job Parser Professional
 
+[![Tests](https://github.com/AJLbN0H/job-parser-professional/actions/workflows/tests.yml/badge.svg)](https://github.com/AJLbN0H/job-parser-professional/actions/workflows/tests.yml)
 ![Python](https://img.shields.io/badge/python-3.13+-blue.svg)
 ![Testing](https://img.shields.io/badge/pytest-enabled-brightgreen.svg)
 
