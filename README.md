@@ -1,54 +1,76 @@
-# Job Parser Professional: Аналитика рынка труда
+# Job Parser Professional
 
-![Python](https://img.shields.io/badge/python-3.11+-blue.svg)
-![PostgreSQL](https://img.shields.io/badge/postgresql-latest-blue.svg)
-![Coverage](https://img.shields.io/badge/coverage-88%25-green.svg)
+![Python](https://img.shields.io/badge/python-3.13+-blue.svg)
 ![Testing](https://img.shields.io/badge/pytest-enabled-brightgreen.svg)
 
-**Job Parser Professional** — это мощная консольная утилита для автоматизированного поиска и фильтрации вакансий. Проект демонстрирует строгое соблюдение принципов ООП, умение работать с внешними API и проектировать надежные схемы баз данных.
+Console utility for searching and managing job vacancies from the [HeadHunter (hh.ru) API](https://api.hh.ru/openapi/redoc). Vacancies can be stored locally in `vacancies.json`, filtered by keyword or ID, ranked by salary, and edited from the menu.
 
-## Ключевой функционал
-* **Интеграция с HeadHunter API:** Получение актуальных данных о вакансиях и компаниях в режиме реального времени.
-* **Работа с БД:** Автоматическое создание таблиц и заполнение данными через PostgreSQL.
-* **Аналитические возможности:** Получение списка компаний с количеством вакансий, расчет средней зарплаты и поиск вакансий по ключевым словам.
-* **Высокое качество кода:** Проект покрыт Unit-тестами на 88%, что гарантирует стабильность работы всех модулей.
+## Features
 
-## Технологический стек
-* **Core:** Python 3.11+.
-* **Database:** PostgreSQL (использование библиотеки psycopg2 / sqlalchemy).
-* **API Interaction:** Requests.
-* **Testing:** Pytest, Coverage.
-* **Architecture:** Object-Oriented Programming (классы для работы с API и БД).
+- **HeadHunter API:** Fetch vacancies by keyword and result count (up to 100 per request).
+- **Local JSON storage:** Append, list, delete, and clear vacancies in `vacancies.json`.
+- **CLI menu:** Search in API or in file, top-N by salary (optional salary range), manual vacancy entry, file reset.
+- **Tests:** Unit tests with mocks for HTTP so CI does not depend on the live API.
 
-## Структура проекта
-* `src/db_manager.py`: Класс для управления SQL-запросами и взаимодействия с PostgreSQL.
-* `src/api_classes.py`: Модуль для работы с внешними эндпоинтами (HeadHunter).
-* `src/utils.py`: Вспомогательные функции для обработки данных и взаимодействия с пользователем.
-* `tests/`: Набор тестов для проверки бизнес-логики.
+## Tech stack
 
-## Установка и запуск
+- Python 3.13+
+- `requests` for HTTP
+- `pytest`, `pytest-cov` for tests
 
-1. Клонируйте репозиторий:
+## Project layout
 
-    git clone https://github.com/AJLbN0H/job-parser-professional.git
+| Path | Role |
+|------|------|
+| `src/main.py` | Interactive menu and user flow |
+| `src/api.py` | Abstract API + `HeadHunterAPI` client |
+| `src/vacancies.py` | `Vacancy` model |
+| `src/file_work.py` | JSON file read/write helpers |
+| `src/utils.py` | Display and helper functions |
+| `tests/` | Pytest suite |
 
-2. Настройте базу данных:
-Создайте базу данных в PostgreSQL и укажите параметры подключения в конфигурационном файле.
+## Setup
 
-3. Установите зависимости:
+Requires [Poetry](https://python-poetry.org/).
 
-    pip install -r requirements.txt
+```bash
+git clone https://github.com/AJLbN0H/job-parser-professional.git
+cd job-parser-professional
+poetry install
+```
 
-4. Запустите приложение:
+## Run
 
-    python main.py
+From the project root (with the virtualenv active):
 
-## Тестирование
-Проект разработан с использованием подхода, близкого к TDD. Для запуска тестов и генерации отчета о покрытии используйте:
+```bash
+poetry run python -m src.main
+```
 
-    pytest --cov=src
+Or, after `poetry shell`:
+
+```bash
+python -m src.main
+```
+
+## Tests
+
+```bash
+poetry run pytest
+```
+
+Coverage example:
+
+```bash
+poetry run pytest --cov=src --cov-report=term-missing
+```
+
+## CI
+
+GitHub Actions workflow `.github/workflows/tests.yml` runs `pytest` on pushes to `main` / `develop` and on pull requests targeting `main`.
 
 ## Roadmap
-* Добавление поддержки других агрегаторов вакансий (SuperJob, Rabota.ru).
-* Реализация графического интерфейса на PyQt или веб-версии на FastAPI.
-* Внедрение асинхронного парсинга для ускорения сбора данных.
+
+- Additional job boards (SuperJob, Rabota.ru, etc.).
+- Optional GUI (e.g. PyQt) or a small web UI (e.g. FastAPI).
+- Async fetching for larger batches.
