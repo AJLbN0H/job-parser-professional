@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  job-parser:
+    build: .
+    container_name: job-parser-professional
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./data:/app/data
+    environment:
+      - VACANCIES_FILE=/app/data/vacancies.json
+    command: python -m src.main
+
+  job-parser-tests:
+    build: .
+    container_name: job-parser-tests
+    volumes:
+      - ./data:/app/data
+    command: python -m pytest -v
